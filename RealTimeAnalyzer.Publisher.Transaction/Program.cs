@@ -55,7 +55,7 @@ namespace RealTimeAnalyzer.Publisher.ErrorLogging
                 Region = loc.Region,
                 Account = RandomizeText("Account", 100),
                 Amount = RandomizeAmount(),
-                Date = RandomizeDate()
+                Created = RandomizeDate()
             };
 
             return trn;
@@ -64,7 +64,7 @@ namespace RealTimeAnalyzer.Publisher.ErrorLogging
         static decimal RandomizeAmount()
         {
             Random x = new Random();
-            return (decimal)x.NextDouble();
+            return (decimal)Math.Round(x.NextDouble() * 1000, 2);
         }
 
         static Location RandomizeLocation()
@@ -135,7 +135,7 @@ namespace RealTimeAnalyzer.Publisher.ErrorLogging
         static DateTime RandomizeDate()
         {
             Random x = new Random();
-            return new DateTime(2019, x.Next(3, 5), x.Next(1, 30), x.Next(24), x.Next(60), 0);
+            return new DateTime(2019, x.Next(3, 5), x.Next(1, 30), 0, 0, 0);
         }
 
         static void Publish<T>(T message)

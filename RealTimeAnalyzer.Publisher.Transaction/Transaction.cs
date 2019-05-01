@@ -10,6 +10,11 @@ namespace RealTimeAnalyzer.Publisher.ErrorLogging
         public string Region { get; set; }
         public decimal Amount { get; set; }
         public string Account { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime Created { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Account},{Region},{Amount},{Created}";
+        }
     }
 }
