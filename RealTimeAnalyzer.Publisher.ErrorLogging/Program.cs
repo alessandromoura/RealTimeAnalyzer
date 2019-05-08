@@ -16,8 +16,12 @@ namespace RealTimeAnalyzer.Publisher.ErrorLogging
         static StorageAccountConfig _storageAccountConfig;
         static EventHubClient _eventHubClient;
 
+        public static Task Task { get; private set; }
+
         static void Main(string[] args)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Title = "Error Logging - Publisher";
             Console.WriteLine("Initializing application!!!");
             Init();
 
@@ -135,19 +139,26 @@ namespace RealTimeAnalyzer.Publisher.ErrorLogging
             return new DateTime(2019, x.Next(3, 5), x.Next(1, 30), x.Next(24), x.Next(60), 0);
         }
 
-        static void Publish<T>(T message)
+        static async Task Publish<T>(T message)
         {
-            // 1. Serialize the message
-            var serializedMessage = JsonConvert.SerializeObject(message);
+            try
+            {
+                // 1. Serialize the message
+                var serializedMessage = JsonConvert.SerializeObject(message);
 
-            // 2. Convert serialized message to bytes
-            var messageBytes = Encoding.UTF8.GetBytes(serializedMessage);
+                // 2. Convert serialized message to bytes
+                var messageBytes = Encoding.UTF8.GetBytes(serializedMessage);
 
-            // 3. Wrap message bytes in EventData instance
-            var eventData = new EventData(messageBytes);
+                // 3. Wrap message bytes in EventData instance
+                var eventData = new EventData(messageBytes);
 
-            // 4. Publish the event
-            _eventHubClient.SendAsync(eventData);
+                // 4. Publish the event
+                await _eventHubClient.SendAsync(eventData);
+            }
+            catch (Exception ex)
+            { 
+                Console.WriteLine($"Error: {ex.Message}");
+            }
         }
 
         #region Initialization

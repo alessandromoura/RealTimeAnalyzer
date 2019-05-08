@@ -18,6 +18,8 @@ namespace RealTimeAnalyzer.Publisher.ErrorLogging
 
         static void Main(string[] args)
         {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Title = "Transactions - Publisher";
             Console.WriteLine("Initializing application!!!");
             Init();
 
@@ -28,7 +30,7 @@ namespace RealTimeAnalyzer.Publisher.ErrorLogging
                 Console.WriteLine("Transactions task started!!!");
                 while (!cts.IsCancellationRequested)
                 {
-                    int timeout = new Random().Next(1, 50);
+                    int timeout = new Random().Next(100, 500);
                     var msg = CreateTransaction();
                     await Task.Delay(timeout);
                     Publish(msg);
@@ -55,7 +57,7 @@ namespace RealTimeAnalyzer.Publisher.ErrorLogging
                 Region = loc.Region,
                 Account = RandomizeText("Account", 100),
                 Amount = RandomizeAmount(),
-                Created = RandomizeDate()
+                Created = new DateTime(2019,5,8) //RandomizeDate()
             };
 
             return trn;
